@@ -1,0 +1,12 @@
+.login{
+	background: url('../pict/login.jpg') no-repeat center center fixed;
+}
+
+.login .centered{
+	margin-top:300px;
+}
+
+body{
+	width:100%;
+	margin:0;
+}
