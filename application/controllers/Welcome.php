@@ -195,7 +195,12 @@ class Welcome extends CI_Controller {
 	{
 		$nota_transaksi = $this->input->post('nota');
 		$tanggal = $this->input->post('tanggal');
+		$ongkir = $this->input->post('ongkir');
+		$nohp = $this->input->post('nohp');
+		$remarks = $this->input->post('remarks');
 		$kode_pelanggan = $this->input->post('pelanggan');
+		$nama_pelanggan = $this->input->post('nama_pelanggan');
+		$kategori_pelanggan = $this->input->post('kategori_pelanggan');
 		$diskon = $this->input->post('diskon');
 		$total_profit = $this->input->post('total');
 		$this->load->library('form_validation');
@@ -205,14 +210,34 @@ class Welcome extends CI_Controller {
 		$this->form_validation->set_error_delimiters('', '');
 		if ($this->form_validation->run() == TRUE)
 		{
-			
-			$data = array
-			(
-				'nota_transaksi' => $nota_transaksi,
-				'tanggal' => $tanggal,
-				'kode_pelanggan' => $kode_pelanggan,
-				'diskon' => $diskon,
-			);
+			if($kategori_pelanggan == "1" || $kategori_pelanggan == "2")
+			{
+				$data = array
+				(
+					'nota_transaksi' => $nota_transaksi,
+					'tanggal' => $tanggal,
+					'diskon' => $diskon,
+					'nama_pelanggan' => $nama_pelanggan,
+					'nohp' => $nohp,
+					'ongkir' => $ongkir,
+					'remarks' => $remarks,
+					'kategori_pelanggan' => $kategori_pelanggan,
+				);
+			}
+			else
+			{
+				$data = array
+				(
+					'nota_transaksi' => $nota_transaksi,
+					'tanggal' => $tanggal,
+					'kode_pelanggan' => $kode_pelanggan,
+					'diskon' => $diskon,
+					'ongkir' => $ongkir,
+					'remarks' => $remarks,
+					'kategori_pelanggan' => $kategori_pelanggan,
+				);
+			}
+
 
 			$kode_transaksi = $this->model->save_transaksi('t_transaksi',$data);
 			$kode = json_encode($kode_transaksi);

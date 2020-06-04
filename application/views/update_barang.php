@@ -23,6 +23,12 @@
 								<input type="text" name="nama_barang" class="col-lg-12 form-control" value="<?php echo $data2->nama_barang;?>"/>
 							</div>
 							<br /><br /><br />
+							<input type="hidden" value="<?php echo $data2->kode_barang;?>" name="kode_barang" />
+							<label class="col-lg-3">Stok</label>
+							<div class="col-lg-9">
+								<input type="text" name="stokx" class="col-lg-12 form-control" value="<?php echo $data2->stok;?>"/>
+							</div>
+							<br /><br /><br />
 						</div>
 						<div class="col-lg-6">
 							<label class="col-lg-3">Harga Modal</label>
@@ -36,6 +42,34 @@
 								<button class="btn btn-info" name="action" value="simpan">Simpan <i class="fa fa-arrow-circle-right" style="margin-left:10px;"></i></button> 
 								<button class="btn btn-danger" name="action" value="hapus">Hapus <i class="fa fa-arrow-circle-right" style="margin-left:10px;"></i></button> 
 							</div>
+						</div>
+						<div class="col-lg-6 form-group">
+							<input type="hidden" value="<?php echo $data2->kode_barang;?>" name="kode_barang" />
+							<label class="col-lg-3">Nama Barang</label>
+							<div class="col-lg-9">
+								<input type="text" name="nama_barang" class="col-lg-12 form-control" value="<?php echo $data2->nama_barang;?>"/>
+							</div>
+							<br /><br /><br />
+							<input type="hidden" value="<?php echo $data2->kode_barang;?>" name="kode_barang" />
+							<label class="col-lg-3">Stok</label>
+							<div class="col-lg-9">
+								<input type="text" name="stokx" class="col-lg-12 form-control" value="<?php echo $data2->stok;?>"/>
+							</div>
+							<br /><br /><br />
+						</div>
+						<div class="col-lg-6 form-group">
+							<input type="hidden" value="<?php echo $data2->kode_barang;?>" name="kode_barang" />
+							<label class="col-lg-3">Nama Barang</label>
+							<div class="col-lg-9">
+								<input type="text" name="nama_barang" class="col-lg-12 form-control" value="<?php echo $data2->nama_barang;?>"/>
+							</div>
+							<br /><br /><br />
+							<input type="hidden" value="<?php echo $data2->kode_barang;?>" name="kode_barang" />
+							<label class="col-lg-3">Stok</label>
+							<div class="col-lg-9">
+								<input type="text" name="stokx" class="col-lg-12 form-control" value="<?php echo $data2->stok;?>"/>
+							</div>
+							<br /><br /><br />
 						</div>
 					<?php } ?>
 					</form>

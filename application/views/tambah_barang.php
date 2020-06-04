@@ -28,6 +28,11 @@
 								<input type="text" name="nama_barang" class="col-lg-12 form-control" />
 							</div>
 							<br /><br /><br />
+							<label class="col-lg-3">Stok</label>
+							<div class="col-lg-9">
+								<input type="text" name="stok" class="col-lg-12 form-control" />
+							</div>
+							<br /><br /><br />
 						</div>
 						<div class="col-lg-6">
 							<label class="col-lg-3">Harga Modal</label>

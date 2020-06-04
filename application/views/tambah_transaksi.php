@@ -24,20 +24,42 @@
 								<input type="date" name="tanggal" required value="<?php echo date('Y-m-d');?>" class="col-lg-12 form-control" />
 							</div>
 							<br /><br /><br />
-							<label class="col-lg-3">Pelanggan</label>
+							<label class="col-lg-3">Kateogri Pelanggan</label>
 							<div class="col-lg-9">
-								<select name="pelanggan" id="pelanggan" required class="col-lg-12 form-control">
-									<option value="" selected disabled>--Pilih Pelanggan--</option>
-							<?php foreach($data2 as $value){ ?>
-									<option value="<?php echo $value->kode_pelanggan;?>"><?php echo $value->toko_pelanggan;?></option>
-							<?php } ?>
+								<select name="kategor_pelanggan" id="pelanggan" required class="col-lg-12 form-control" onchange="kategori_pelanggan(this.value)">
+									<option value="1" selected>Pelanggan</option>
+									<option value="2">Dropship</option>
+									<option value="3">Reseller</option>
 								</select>
 							</div>
 							<br /><br /><br />
-							
+							<div class="hidden1" style="display:none;">
+								<label class="col-lg-3">Reseller</label>
+								<div class="col-lg-9">
+									<select name="pelanggan" id="pelanggan" required class="col-lg-12 form-control">
+										<option value="" selected disabled>--Pilih Pelanggan--</option>
+								<?php foreach($data2 as $value){ ?>
+										<option value="<?php echo $value->kode_pelanggan;?>"><?php echo $value->toko_pelanggan;?></option>
+								<?php } ?>
+									</select>
+								</div>
+							<br /><br /><br />
+							</div>
+							<div class="hidden2">
+								<label class="col-lg-3">Nama</label>
+								<div class="col-lg-9">
+									<input type="text" name="nama_pelanggan" required class="col-lg-12 form-control" />
+								</div>
+								<br /><br /><br />
+							</div>
+							<label class="col-lg-3">Ongkir</label>
+							<div class="col-lg-9">
+								<input type="text" name="ongkir" required class="col-lg-12 form-control" />
+							</div>
+							<br /><br /><br />
 						</div>
 						<div class="col-lg-6">
-							<label class="col-lg-3">Nota</label>
+							<label class="col-lg-3">Invoice No</label>
 							<div class="col-lg-9">
 								<input type="text" name="nota" required class="col-lg-12 form-control" />
 							</div>
@@ -46,6 +68,20 @@
 							<div class="col-lg-9">
 								<input type="text" name="diskon" class="col-lg-12 form-control" />
 							</div>
+							<br /><br /><br />
+							<div class="hidden2">
+								<label class="col-lg-3">No Hp</label>
+								<div class="col-lg-9">
+									<input type="text" name="nohp" required class="col-lg-12 form-control" />
+								</div>
+								<br /><br /><br />
+							</div>
+							<label class="col-lg-3">Notes</label>
+							<div class="col-lg-9">
+								<textarea rows="3" name="remarks" required class="col-lg-12 form-control"></textarea>
+							</div>
+							<br /><br /><br />
+							<br /><br />
 						</div>
 						<?php if ($this->session->flashdata('error') != ''){?>
 						<div class="col-lg-12 alert alert-danger">
@@ -167,6 +203,28 @@
 </div>
 
 <script type="text/javascript">
+
+function kategori_pelanggan(id)
+{
+	if(id == "1")
+	{
+		$('.hidden1').hide();
+		$('.hidden2').show();
+
+	}
+	else if(id == "2")
+	{
+		$('.hidden1').hide();
+		$('.hidden2').show();
+
+	}
+	else
+	{
+		$('.hidden1').show();
+		$('.hidden2').hide();
+	}
+}
+
 $(document).ready(function(){
 	$('#barang').change(function(){
 		var barang = document.getElementById('barang').value;
@@ -224,4 +282,5 @@ $(document).ready(function(){
 		$('#profit').val(profit);
 	});
 });
+
 </script>
