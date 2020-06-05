@@ -1,6 +1,6 @@
-<div class="col-lg-11"><h3>List Pelanggan</h2></div>
+<div class="col-lg-11"><h3>List Supplier</h2></div>
 <div class="col-lg-1 text-right">
-	<a href="<?php echo site_url('welcome/tambah_pelanggan');?>"> 
+	<a href="<?php echo site_url('welcome/tambah_supplier');?>"> 
 		<button class="btn btn-danger text-right" style="margin-top:15px;"><i class="fa fa-fw fa-plus"></i></button>
 	</a>
 </div>
@@ -14,7 +14,7 @@
 			<div class="box">
 				<div class="box-body">
 					<div class="col-lg-12">
-						<form class="form" method="POST" action="<?php echo site_url('welcome/cari_pelanggan');?>">
+						<form class="form" method="POST" action="<?php site_url('welcome/cari_supplier');?>">
 							<br />
 							<div class="form-group col-lg-5">
 								<input class="form-control" type="text" name="cari" placeholder="Search.."/>
@@ -28,7 +28,7 @@
 						<table id="tablejobfile" class="table table-bordered table-striped col-md-12">
 							<thead>
 								<tr>
-									<th>Nama Reseller / Dropshipper</th>
+									<th>Nama Toko</th>
 									<th>Nama PIC</th>
 									<th>No Telp</th>
 									<th>Alamat</th>
@@ -37,10 +37,10 @@
 							<tbody>
 								<?php foreach($data as $data2){ ?>
 								<tr>
-									<td><a href="<?php echo site_url()?>/welcome/update_pelanggan/<?php echo $data2->kode_pelanggan; ?>"><?php echo $data2->toko_pelanggan;?></td>
-									<td><?php echo $data2->pic_pelanggan;?></td>
-									<td><?php echo $data2->telp_pelanggan;?></td>
-									<td><?php echo $data2->alamat_pelanggan;?></td>
+									<td><a href="<?php echo site_url()?>/welcome/update_supplier/<?php echo $data2->kode_supplier; ?>"><?php echo $data2->toko_supplier;?></td>
+									<td><?php echo $data2->pic_supplier;?></td>
+									<td><?php echo $data2->telp_supplier;?></td>
+									<td><?php echo $data2->alamat_supplier;?></td>
 								</tr>
 								<?php } ?>
 							</tbody>

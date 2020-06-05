@@ -117,6 +117,12 @@ class Welcome extends CI_Controller {
 		$data['data'] = $this->model->get_pelanggan();
 		$this->_render_admin_layout('list_pelanggan',$data);
 	}
+
+	public function list_supplier()
+	{
+		$data['data'] = $this->model->get_supplier();
+		$this->_render_admin_layout('list_supplier',$data);
+	}
 	
 	public function list_admin()
 	{
@@ -135,6 +141,11 @@ class Welcome extends CI_Controller {
 	public function tambah_pelanggan()
 	{
 		$this->_render_admin_layout('tambah_pelanggan','');
+	}
+
+	public function tambah_supplier()
+	{
+		$this->_render_admin_layout('tambah_supplier','');
 	}
 	
 	public function tambah_barang()
@@ -190,9 +201,28 @@ class Welcome extends CI_Controller {
 		$this->model->save_pelanggan('t_pelanggan',$data);
 		$this->list_pelanggan();
 	}
+
+	public function save_supplier()
+	{
+		$toko_supplier = $this->input->post('toko_supplier');
+		$pic_supplier = $this->input->post('pic_supplier');
+		$alamat_supplier = $this->input->post('alamat_supplier');
+		$telp_supplier = $this->input->post('telp_supplier');
+		
+		$data = array(
+			'toko_supplier' => $toko_supplier,
+			'pic_supplier' => $pic_supplier,
+			'alamat_supplier' => $alamat_supplier,
+			'telp_supplier' => $telp_supplier
+		);
+		
+		$this->model->save_supplier('t_supplier',$data);
+		$this->list_supplier();
+	}
 	
 	public function save_transaksi()
 	{
+		$marketplace = $this->input->post('marketplace');
 		$nota_transaksi = $this->input->post('nota');
 		$tanggal = $this->input->post('tanggal');
 		$ongkir = $this->input->post('ongkir');
@@ -206,6 +236,7 @@ class Welcome extends CI_Controller {
 		$this->load->library('form_validation');
 		$this->form_validation->set_rules('nota', 'Nota', 'required');
 		$this->form_validation->set_rules('tanggal', 'tanggal', 'required');
+		$this->form_validation->set_rules('marketplace', 'marketplace', 'required');
 		$this->form_validation->set_rules('pelanggan', 'pelanggan', 'required');
 		$this->form_validation->set_error_delimiters('', '');
 		if ($this->form_validation->run() == TRUE)
@@ -222,6 +253,7 @@ class Welcome extends CI_Controller {
 					'ongkir' => $ongkir,
 					'remarks' => $remarks,
 					'kategori_pelanggan' => $kategori_pelanggan,
+					'marketplace' => $marketplace
 				);
 			}
 			else
@@ -235,9 +267,9 @@ class Welcome extends CI_Controller {
 					'ongkir' => $ongkir,
 					'remarks' => $remarks,
 					'kategori_pelanggan' => $kategori_pelanggan,
+					'marketplace' => $marketplace
 				);
 			}
-
 
 			$kode_transaksi = $this->model->save_transaksi('t_transaksi',$data);
 			$kode = json_encode($kode_transaksi);
@@ -246,13 +278,28 @@ class Welcome extends CI_Controller {
 			$transaksi = json_encode($transaksi_temp);
 			$parameter = [];
 			foreach ($transaksi_temp as  $key => $value) {
-				$parameter['data']['kode_transaksi'] = $id[0]['kode_transaksi'];;
+				$parameter['data']['kode_transaksi'] = $id[0]['kode_transaksi'];
 				$parameter['data']['kode_barang'] = $value->kode_barang;
 				$parameter['data']['quantity'] = $value->quantity;
 				$parameter['data']['harga_modal'] = $value->harga_modal;
 				$parameter['data']['harga_jual'] = $value->harga_jual;
 				$parameter['data']['total_profit'] = $value->total_profit;
 				$this->model->save_transaksi_child($parameter);
+				$on_stok = $this->model->get_stok($value->kode_barang);
+				$on_stok = $on_stok - $value->quantity;
+				$data_stok = array(
+					'stok' => $on_stok
+				);
+				$this->model->update_stok($value->kode_barang,$data_stok);
+				
+				$data_log = array(
+					'id_barang' => $value->kode_barang,
+					'jumlah_barang' => $value->quantity,
+					'tanggal_barang' => $tanggal,
+					'id_transaksi' => $id[0]['kode_transaksi'],
+				);
+				$this->model->save_barang_log($id_barang,$data_log);
+
 			}
 			$this->model->empty_transaksi_temp();
 			$this->list_transaksi();
@@ -313,10 +360,20 @@ class Welcome extends CI_Controller {
 		$this->update_transaksi($kode);
 	}
 	
-	public function update_barang()
+	public function update_barang($id_barang = '')
 	{
-		$select = $this->uri->segment(3);
+		if($id_barang != '')
+		{
+			$select = $id_barang;
+		}
+		else
+		{
+			$select = $this->uri->segment(3);
+		}
 		$data['data'] = $this->model->update_barang($select);
+		$data['data_supplier'] = $this->model->get_supplier();
+		$data['data_stok'] = $this->model->get_history_barang($select);
+		$data['data_transaksi'] = $this->model->get_barang_log($select);
 		$this->_render_admin_layout('update_barang',$data);
 	}
 	
@@ -325,6 +382,13 @@ class Welcome extends CI_Controller {
 		$select = $this->uri->segment(3);
 		$data['data'] = $this->model->update_pelanggan($select);
 		$this->_render_admin_layout('update_pelanggan',$data);
+	}
+
+	public function update_supplier()
+	{
+		$select = $this->uri->segment(3);
+		$data['data'] = $this->model->update_supplier($select);
+		$this->_render_admin_layout('update_supplier',$data);
 	}
 	
 	public function update_transaksi($kode='')
@@ -383,6 +447,36 @@ class Welcome extends CI_Controller {
 			$this->list_barang();
 		}		
 	}
+
+	public function doupdate_history_barang()
+	{
+		$id_barang = $this->input->post('id_barang');
+		$stok = $this->input->post('stok');
+		$jumlah_barang = $this->input->post('jumlah_barang');
+		$harga_modal = $this->input->post('harga_modal');
+		$ongkir = $this->input->post('ongkir');
+		$tanggal_masuk = $this->input->post('tanggal_masuk');
+		$kode_supplier = $this->input->post('kode_supplier');
+
+		$data = array(
+			'id_barang' => $id_barang,
+			'jumlah_barang' => $jumlah_barang,
+			'harga_modal' => $harga_modal,
+			'ongkir' => $ongkir,
+			'tanggal_masuk' => $tanggal_masuk,
+			'kode_supplier' => $kode_supplier
+		);
+
+		$this->model->insert_stok_barang($data);
+
+		$on_stok = $stok + $jumlah_barang;
+		$data2 = array(
+			'stok' => $on_stok
+		);
+		$this->model->update_stok($id_barang,$data2);
+		
+		$this->update_barang($id_barang);
+	}
 	
 	public function doupdate_admin()
 	{
@@ -439,6 +533,37 @@ class Welcome extends CI_Controller {
 			$this->list_pelanggan();
 		}
 	}
+
+	public function doupdate_supplier()
+	{
+		$action = $this->input->post('action');
+		$kode_supplier = $this->input->post('kode_supplier');
+		if($action == "simpan")
+		{
+			$toko_supplier = $this->input->post('toko_supplier');
+			$pic_supplier = $this->input->post('pic_supplier');
+			$telp_supplier = $this->input->post('telp_supplier');
+			$alamat_supplier = $this->input->post('alamat_supplier');
+			
+			$data = array(
+				'toko_supplier' => $toko_supplier,
+				'pic_supplier' => $pic_supplier,
+				'telp_supplier' => $telp_supplier,
+				'alamat_supplier' => $alamat_supplier
+			);
+			
+			$query = $this->model->doupdate_supplier('t_supplier',$data,$kode_supplier);
+			if($query)
+			{
+				$this->list_supplier();
+			}
+		}
+		elseif($action=="hapus")
+		{
+			$this->model->delete_supplier($kode_supplier);
+			$this->list_supplier();
+		}
+	}
 	
 	public function doupdate_transaksi($kode_transaksi)
 	{
@@ -484,6 +609,13 @@ class Welcome extends CI_Controller {
 		$cari = $this->input->post('cari');
 		$data['data'] = $this->model->cari_pelanggan($cari);
 		$this->_render_admin_layout('cari_pelanggan',$data);
+	}
+
+	public function cari_supplier()
+	{
+		$cari = $this->input->post('cari');
+		$data['data'] = $this->model->cari_supplier($cari);
+		$this->_render_admin_layout('cari_supplier',$data);
 	}
 
 	public function delete_transaksi_temp()

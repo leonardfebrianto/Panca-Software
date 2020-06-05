@@ -19,6 +19,15 @@
 				</div>
 				<div class="box-body">
 						<div class="col-lg-6 form-group">
+							<label class="col-lg-3">Marketplace</label>
+							<div class="col-lg-9">
+								<select name="marketplace" id="marketplace" required class="col-lg-12 form-control">
+									<option value="1" selected>Tokopedia</option>
+									<option value="2">Shopee</option>
+									<option value="3">Bukalapak</option>
+								</select>
+							</div>
+							<br /><br /><br />
 							<label class="col-lg-3">Tanggal</label>
 							<div class="col-lg-9">
 								<input type="date" name="tanggal" required value="<?php echo date('Y-m-d');?>" class="col-lg-12 form-control" />
@@ -26,7 +35,7 @@
 							<br /><br /><br />
 							<label class="col-lg-3">Kateogri Pelanggan</label>
 							<div class="col-lg-9">
-								<select name="kategor_pelanggan" id="pelanggan" required class="col-lg-12 form-control" onchange="kategori_pelanggan(this.value)">
+								<select name="kategor_pelanggan" id="kategor_pelanggan" required class="col-lg-12 form-control" onchange="kategori_pelanggan(this.value)">
 									<option value="1" selected>Pelanggan</option>
 									<option value="2">Dropship</option>
 									<option value="3">Reseller</option>
@@ -78,7 +87,7 @@
 							</div>
 							<label class="col-lg-3">Notes</label>
 							<div class="col-lg-9">
-								<textarea rows="3" name="remarks" required class="col-lg-12 form-control"></textarea>
+								<textarea rows="4" name="remarks" class="col-lg-12 form-control"></textarea>
 							</div>
 							<br /><br /><br />
 							<br /><br />

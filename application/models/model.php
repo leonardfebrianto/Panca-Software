@@ -25,8 +25,18 @@ class Model extends CI_Model{
 	{
 		$this->db->insert($table,$data);
 	}
+
+	function insert_stok_barang($data)
+	{
+		$this->db->insert('t_history_barang',$data);
+	}
 	
 	function save_pelanggan($table,$data)
+	{
+		$this->db->insert($table,$data);
+	}
+
+	function save_supplier($table,$data)
 	{
 		$this->db->insert($table,$data);
 	}
@@ -123,10 +133,51 @@ class Model extends CI_Model{
 		$result = $query->result();
 		return $result;
 	}
+
+	function get_stok($id_barang)
+	{
+		$this->db->select('stok');
+		$this->db->where('kode_barang',$id_barang);
+		$query = $this->db->get('t_barang');
+		$result = $query->row();
+		return $result->stok;
+	}
+	
+	function get_history_barang($id_barang)
+	{
+		$this->db->select('t_history_barang.*');
+		$this->db->select('t_supplier.toko_supplier');
+		$this->db->join("t_supplier","t_history_barang.kode_supplier = t_supplier.kode_supplier","left outer");
+		$this->db->where('t_history_barang.id_barang',$id_barang);
+		$query = $this->db->get('t_history_barang');
+		$result = $query->result();
+		return $result;
+	}
+
+	function get_barang_log($id_barang)
+	{
+		$this->db->select('t_barang_log.*');
+		$this->db->select('t_transaksi.nota_transaksi,marketplace');
+		$this->db->select('t_transaksi_child.quantity,kode_barang');
+		$this->db->join("t_transaksi","t_barang_log.id_transaksi = t_transaksi.kode_transaksi","left outer");
+		$this->db->join("t_transaksi_child","t_transaksi.kode_transaksi = t_transaksi_child.kode_transaksi","left outer");
+		$this->db->where('t_barang_log.id_barang',$id_barang);
+		$this->db->where('t_transaksi_child.kode_barang',$id_barang);
+		$query = $this->db->get('t_barang_log');
+		$result = $query->result();
+		return $result;
+	}
 	
 	function get_pelanggan()
 	{
 		$query = $this->db->get('t_pelanggan');
+		$result = $query->result();
+		return $result;
+	}
+
+	function get_supplier()
+	{
+		$query = $this->db->get('t_supplier');
 		$result = $query->result();
 		return $result;
 	}
@@ -174,6 +225,14 @@ class Model extends CI_Model{
 		$result = $query->result();
 		return $result;
 	}
+
+	function update_supplier($id)
+	{
+		$this->db->where("kode_supplier",$id);
+		$query = $this->db->get('t_supplier');
+		$result = $query->result();
+		return $result;
+	}
 	
 	function update_admin($id)
 	{
@@ -183,16 +242,30 @@ class Model extends CI_Model{
 		return $result;
 	}
 	
+	function update_stok($id_barang,$data)
+	{
+		$this->db->where("kode_barang",$id_barang);
+		$result = $this->db->update('t_barang',$data);
+		return $result;
+	}
+	
 	function doupdate_barang($table,$data,$kode)
 	{
 		$this->db->where("kode_barang",$kode);
 		$result = $this->db->update($table,$data);
 		return $result;
 	}
-	
+
 	function doupdate_pelanggan($table,$data,$kode)
 	{
 		$this->db->where("kode_pelanggan",$kode);
+		$result = $this->db->update($table,$data);
+		return $result;
+	}
+	
+	function doupdate_supplier($table,$data,$kode)
+	{
+		$this->db->where("kode_supplier",$kode);
 		$result = $this->db->update($table,$data);
 		return $result;
 	}
@@ -243,6 +316,17 @@ class Model extends CI_Model{
 		$result = $query->result();
 		return $result;
 	}
+
+	function cari_supplier($cari)
+	{
+		$this->db->or_like('toko_supplier', $cari);
+		$this->db->or_like('pic_supplier', $cari);
+		$this->db->or_like('alamat_supplier', $cari);
+		$this->db->or_like('telp_supploer', $cari);
+		$query = $this->db->get('t_supplier');
+		$result = $query->result();
+		return $result;
+	}
 	
 	function delete_transaksi($kode)
 	{
@@ -260,6 +344,12 @@ class Model extends CI_Model{
 	{
 		$this->db->where('kode_pelanggan', $kode);
 		$this->db->delete('t_pelanggan');
+	}
+
+	function delete_supplier($kode)
+	{
+		$this->db->where('kode_supplier', $kode);
+		$this->db->delete('t_supplier');
 	}
 
 	function delete_transaksi_temp($id)

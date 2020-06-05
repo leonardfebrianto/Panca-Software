@@ -126,17 +126,22 @@
             <i class="fa fa-edit"></i> <span>Transaksi</span>
           </a>
         </li>
-		<li>
+        <li>
           <a href="<?php echo site_url('welcome/list_barang');?>">
             <i class="fa fa-edit"></i> <span>Barang</span>
           </a>
         </li>
-		<li>
+        <li>
           <a href="<?php echo site_url('welcome/list_pelanggan');?>">
             <i class="fa fa-edit"></i> <span>Pelanggan</span>
           </a>
         </li>
-		<li>
+        <li>
+          <a href="<?php echo site_url('welcome/list_supplier');?>">
+            <i class="fa fa-edit"></i> <span>Supplier</span>
+          </a>
+        </li>
+        <li>
           <a href="<?php echo site_url('welcome/list_admin');?>">
             <i class="fa fa-edit"></i> <span>Admin</span>
           </a>
